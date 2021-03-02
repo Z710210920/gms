@@ -44,7 +44,7 @@ public class R {
         return this;
     }
 
-    public R messsage(String message){
+    public R message(String message){
         this.setMessage(message);
         return this;
     }

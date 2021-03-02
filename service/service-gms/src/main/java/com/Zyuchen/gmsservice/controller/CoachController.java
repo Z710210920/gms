@@ -35,6 +35,7 @@ apiparam：参数
 @Api(value="教练管理", tags={"教练管理接口"})
 @RestController
 @RequestMapping("/gmsservice/coach")
+@CrossOrigin
 public class CoachController {
 
     @Autowired
@@ -49,7 +50,7 @@ public class CoachController {
     }
 
     @ApiOperation(value="根据ID删除教练")
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/{id}")
     public R removeCoachById(
             @ApiParam(name = "id", value = "教练ID", required = true)
             @PathVariable String id){
@@ -115,7 +116,7 @@ public class CoachController {
     }
 
     @ApiOperation(value = "新增教练")
-    @PostMapping
+    @PostMapping("save")
     public R save(
             @ApiParam(name = "coach", value = "教练对象", required = true)
             @RequestBody Coach coach){
@@ -124,7 +125,7 @@ public class CoachController {
     }
 
     @ApiOperation(value = "根据ID查询教练")
-    @GetMapping("{id}")
+    @GetMapping("get/{id}")
     public R getById(
             @ApiParam(name = "id", value = "教练ID", required = true)
             @PathVariable String id){
@@ -133,7 +134,7 @@ public class CoachController {
     }
 
     @ApiOperation(value="根据ID修改教练")
-    @PutMapping("{id}")
+    @PutMapping("update/{id}")
     public R updateById(
             @ApiParam(name = "id", value = "教练ID", required = true)
             @PathVariable String id,
