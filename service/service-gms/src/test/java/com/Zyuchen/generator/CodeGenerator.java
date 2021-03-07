@@ -29,7 +29,7 @@ public class CodeGenerator {
         gc.setOutputDir("C:\\Users\\yuchen\\Desktop\\spring-cloud\\mycodes\\gms\\service\\service-coach" + "/src/main/java");
         gc.setAuthor("Zyuchen");
         gc.setOpen(false); //生成后是否打开资源管理器
-        gc.setFileOverride(true); //重新生成时文件是否覆盖
+        gc.setFileOverride(false); //重新生成时文件是否覆盖
         gc.setServiceName("%sService");	//去掉Service接口的首字母I
         gc.setIdType(IdType.ID_WORKER_STR); //主键策略
         gc.setDateType(DateType.ONLY_DATE);//定义生成的实体类中日期类型

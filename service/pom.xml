@@ -8,7 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modules>
-        <module>service-coach</module>
+        <module>service-gms</module>
+        <module>service-oss</module>
+        <module>service-msm</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 

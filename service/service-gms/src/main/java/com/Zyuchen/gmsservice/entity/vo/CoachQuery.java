@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CoachQuery {
     @ApiModelProperty(value="教练名称，模糊查询")
-    private String coachNickName;
+    private String coachName;
 
     @ApiModelProperty(value="头衔， 1普通教练 2中级教练 3高级教练")
     private Integer level;
@@ -14,12 +14,12 @@ public class CoachQuery {
     @ApiModelProperty(value = "教练类型， 1 2 3")
     private Integer type;
 
-    public String getCoachNickName() {
-        return coachNickName;
+    public String getCoachName() {
+        return coachName;
     }
 
-    public void setCoachNickName(String coachNickName) {
-        this.coachNickName = coachNickName;
+    public void setCoachName(String coachNickName) {
+        this.coachName = coachName;
     }
 
     public Integer getLevel() {

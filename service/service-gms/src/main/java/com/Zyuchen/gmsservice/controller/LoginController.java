@@ -3,6 +3,7 @@ package com.Zyuchen.gmsservice.controller;
 import com.Zyuchen.common.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,7 +14,13 @@ public class LoginController {
 
     @ApiOperation("用户登录")
     @PostMapping("login")
-    public R login(){
+    public R login(/*@RequestBody @ApiParam("用户名") String username,
+                   @RequestBody @ApiParam("密码") String password*/){
+        /*if(username.equals("admin") && password.equals("admin")){
+            return R.ok().data("token", "admin");
+        }else{
+            return R.error();
+        }*/
         return R.ok().data("token", "admin");
     }
 

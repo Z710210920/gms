@@ -1,10 +1,8 @@
 package com.Zyuchen.gmsservice.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,11 +29,8 @@ public class Coach implements Serializable {
     @TableId(value = "coachId", type = IdType.ID_WORKER_STR)
     private String coachId;
 
-    @TableField("coachNickName")
-    private String coachNickName;
-
-    @TableField("coachRealName")
-    private String coachRealName;
+    @TableField("coachName")
+    private String coachName;
 
     @TableField("coachPhoneNumber")
     private String coachPhoneNumber;
@@ -45,6 +40,9 @@ public class Coach implements Serializable {
 
     @TableField("coachBalance")
     private Integer coachBalance;
+
+    @TableField("level")
+    private Integer level;
 
     @TableField("coachPrivilege")
     private Integer coachPrivilege;
@@ -68,7 +66,14 @@ public class Coach implements Serializable {
 
     @ApiModelProperty(value = "逻辑删除")
     @TableField("isDeleted")
+    @TableLogic
     private Boolean isDeleted;
+
+    @TableField("intro")
+    private String intro;
+
+    @TableField("avatar")
+    private String avatar;
 
     public String getCoachId() {
         return coachId;
@@ -78,20 +83,12 @@ public class Coach implements Serializable {
         this.coachId = coachId;
     }
 
-    public String getCoachNickName() {
-        return coachNickName;
-    }
-
-    public void setCoachNickName(String coachNickName) {
-        this.coachNickName = coachNickName;
-    }
-
     public String getCoachRealName() {
-        return coachRealName;
+        return coachName;
     }
 
-    public void setCoachRealName(String coachRealName) {
-        this.coachRealName = coachRealName;
+    public void setCoachRealName(String coachName) {
+        this.coachName = coachName;
     }
 
     public String getCoachPhoneNumber() {
@@ -172,5 +169,37 @@ public class Coach implements Serializable {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public String getCoachName() {
+        return coachName;
+    }
+
+    public void setCoachName(String coachName) {
+        this.coachName = coachName;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

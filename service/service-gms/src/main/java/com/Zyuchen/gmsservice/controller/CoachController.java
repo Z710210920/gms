@@ -92,11 +92,11 @@ public class CoachController {
         //创建page对象
         Page<Coach> pageCoach = new Page<>(current,limit);
         QueryWrapper<Coach> wrapper = new QueryWrapper<>();
-        String coachNickName = coachQuery.getCoachNickName();
+        String coachName = coachQuery.getCoachName();
         Integer level = coachQuery.getLevel();
         Integer type = coachQuery.getType();
-        if(!StringUtils.isEmpty(coachNickName)){
-            wrapper.like("coachNickName",coachNickName);
+        if(!StringUtils.isEmpty(coachName)){
+            wrapper.like("coachName",coachName);
         }
         if(!StringUtils.isEmpty(level)){
             wrapper.eq("level", level);
@@ -141,6 +141,7 @@ public class CoachController {
             @ApiParam(name = "coach", value = "教练对象", required = true)
             @RequestBody Coach coach){
         coach.setCoachId(id);
+        System.out.println(coach.toString());
         coachService.updateById(coach);
         return R.ok();
     }

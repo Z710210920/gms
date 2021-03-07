@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @MapperScan("com.Zyuchen.gmsservice.mapper")
 public class GMSconfig {
+    /*
+     * 逻辑删除
+     * */
     @Bean
     public ISqlInjector sqlInjector(){
         return new LogicSqlInjector();
