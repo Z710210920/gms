@@ -29,4 +29,10 @@ public class LoginController {
     public R info(){
         return R.ok().data("roles", "[admin]").data("name","admin").data("avatar","https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3740520249,3092805081&fm=26&gp=0.jpg");
     }
+
+    @ApiOperation("退出登录")
+    @PostMapping("logout")
+    public R logout(){
+        return R.ok();
+    }
 }
