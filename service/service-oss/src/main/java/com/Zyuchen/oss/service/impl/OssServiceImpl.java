@@ -31,7 +31,7 @@ public class OssServiceImpl implements OssService {
 
             //使用日期对文件进行分类
             String datePath = new DateTime().toString("yyyy/MM/dd");
-            fileName = datePath+"/"+fileName;
+            fileName = "avatar/"+datePath+"/"+fileName;
 
             //bucketName
             //路径文件名

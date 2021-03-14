@@ -79,7 +79,7 @@ public class CoachController {
         map.put("rows", records);
         return R.ok().data(map);*/
 
-        return R.ok().data("total", total).data("rows", records);
+        return R.ok().data("total", total).data("item", records);
     }
 
     @PostMapping("pageCoachCondition/{current}/{limit}")
@@ -112,7 +112,7 @@ public class CoachController {
         List<Coach> records = pageCoach.getRecords();
 
 
-        return R.ok().data("total", total).data("rows", records);
+        return R.ok().data("total", total).data("item", records);
     }
 
     @ApiOperation(value = "新增教练")
