@@ -8,11 +8,13 @@ public class CoachQuery {
     @ApiModelProperty(value="教练名称，模糊查询")
     private String coachName;
 
+    @ApiModelProperty(value="教练真实名称，模糊查询")
+    private String coachRealName;
+
+    private String coachPhoneNumber;
+
     @ApiModelProperty(value="头衔， 1普通教练 2中级教练 3高级教练")
     private Integer level;
-
-    @ApiModelProperty(value = "教练类型， 1 2 3")
-    private Integer type;
 
     public String getCoachName() {
         return coachName;
@@ -30,11 +32,19 @@ public class CoachQuery {
         this.level = level;
     }
 
-    public Integer getType() {
-        return type;
+    public String getCoachRealName() {
+        return coachRealName;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setCoachRealName(String coachRealName) {
+        this.coachRealName = coachRealName;
+    }
+
+    public String getCoachPhoneNumber() {
+        return coachPhoneNumber;
+    }
+
+    public void setCoachPhoneNumber(String coachPhoneNumber) {
+        this.coachPhoneNumber = coachPhoneNumber;
     }
 }

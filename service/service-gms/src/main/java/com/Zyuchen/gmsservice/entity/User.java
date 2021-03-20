@@ -12,40 +12,37 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 教练信息表
+ * 用户信息表
  * </p>
  *
  * @author Zyuchen
- * @since 2021-02-20
+ * @since 2021-03-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="Coach对象", description="教练信息表")
-public class Coach implements Serializable {
+@ApiModel(value="User对象", description="用户信息表")
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "coachId", type = IdType.ID_WORKER_STR)
-    private String coachId;
+    @TableId(value = "userId", type = IdType.ID_WORKER_STR)
+    private String userId;
 
-    @TableField("coachName")
-    private String coachName;
+    @TableField("userName")
+    private String userName;
 
-    @TableField("coachRealName")
-    private String coachRealName;
+    @TableField("userRealName")
+    private String userRealName;
 
-    @TableField("coachPhoneNumber")
-    private String coachPhoneNumber;
+    @TableField("userPhoneNumber")
+    private String userPhoneNumber;
 
-    @TableField("coachIdentityNumber")
-    private String coachIdentityNumber;
+    @TableField("userIdentityNumber")
+    private String userIdentityNumber;
 
-    @TableField("level")
-    private Integer level;
-
-    @TableField("coachPassword")
-    private String coachPassword;
+    @TableField("userPassword")
+    private String userPassword;
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
@@ -60,9 +57,12 @@ public class Coach implements Serializable {
     @TableLogic
     private Boolean isDeleted;
 
-    @TableField("intro")
+    @ApiModelProperty(value = "等级")
+    private Integer level;
+
+    private String avatar;
+
     private String intro;
 
-    @TableField("avatar")
-    private String avatar;
+
 }

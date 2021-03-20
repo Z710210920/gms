@@ -94,15 +94,19 @@ public class CoachController {
         QueryWrapper<Coach> wrapper = new QueryWrapper<>();
         String coachName = coachQuery.getCoachName();
         Integer level = coachQuery.getLevel();
-        Integer type = coachQuery.getType();
+        String coachPhoneNumber = coachQuery.getCoachPhoneNumber();
+        String coachRealName = coachQuery.getCoachRealName();
+        if(!StringUtils.isEmpty(coachRealName)){
+            wrapper.like("coachRealName",coachRealName);
+        }
+        if(!StringUtils.isEmpty(coachPhoneNumber)){
+            wrapper.eq("coachPhoneNumber",coachPhoneNumber);
+        }
         if(!StringUtils.isEmpty(coachName)){
             wrapper.like("coachName",coachName);
         }
         if(!StringUtils.isEmpty(level)){
             wrapper.eq("level", level);
-        }
-        if(!StringUtils.isEmpty(type)){
-            wrapper.eq("type", type);
         }
         //分页数据储存在pageTeacher对象里面
         coachService.page(pageCoach, wrapper);

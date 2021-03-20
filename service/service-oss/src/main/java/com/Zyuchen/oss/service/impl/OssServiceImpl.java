@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class OssServiceImpl implements OssService {
     @Override
-    public String uploadFileAvatar(MultipartFile file) {
+    public String uploadFileAvatar(String module, MultipartFile file) {
         String endpoint = ConstantPropertiesUtils.END_POINT;
         String accessKeyId = ConstantPropertiesUtils.KEY_ID;
         String accessKeySecret = ConstantPropertiesUtils.KEY_SECRET;
@@ -31,7 +33,7 @@ public class OssServiceImpl implements OssService {
 
             //使用日期对文件进行分类
             String datePath = new DateTime().toString("yyyy/MM/dd");
-            fileName = "avatar/"+datePath+"/"+fileName;
+            fileName = moduleToPath(module) + "/"+datePath+"/"+fileName;
 
             //bucketName
             //路径文件名
@@ -47,5 +49,14 @@ public class OssServiceImpl implements OssService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String moduleToPath(String module){
+        Map<String, String> pathmMapping = new HashMap<String, String>();
+        pathmMapping.put("user","avatar");
+        pathmMapping.put("coach","avatar");
+        pathmMapping.put("classroom","classRoomPicture");
+
+        return pathmMapping.get(module);
     }
 }
