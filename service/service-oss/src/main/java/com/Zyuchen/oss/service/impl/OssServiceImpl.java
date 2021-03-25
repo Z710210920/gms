@@ -56,6 +56,7 @@ public class OssServiceImpl implements OssService {
         pathmMapping.put("user","avatar");
         pathmMapping.put("coach","avatar");
         pathmMapping.put("classroom","classRoomPicture");
+        pathmMapping.put("classInfo","classCover");
 
         return pathmMapping.get(module);
     }

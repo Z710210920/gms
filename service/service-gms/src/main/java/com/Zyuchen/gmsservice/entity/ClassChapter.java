@@ -2,8 +2,8 @@ package com.Zyuchen.gmsservice.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.io.Serializable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,34 +13,27 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 教室
+ * 章节
  * </p>
  *
  * @author Zyuchen
- * @since 2021-03-19
+ * @since 2021-03-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="Classroom对象", description="教室")
-public class Classroom implements Serializable {
+@ApiModel(value="ClassChapter对象", description="章节")
+public class ClassChapter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "classRoomId", type = IdType.ID_WORKER_STR)
-    private String classRoomId;
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
+    private String id;
 
-    @TableField("classRoomName")
-    private String classRoomName;
+    @TableField("classId")
+    private String classId;
 
-    @ApiModelProperty(value = "最大人数，默认100人")
-    private Integer maximum;
-
-    @ApiModelProperty(value = "教室介绍")
-    private String intro;
-
-    @ApiModelProperty(value = "教室图片")
-    private String picture;
+    private String title;
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")

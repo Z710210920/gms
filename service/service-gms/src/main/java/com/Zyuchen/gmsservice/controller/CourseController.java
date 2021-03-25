@@ -2,12 +2,9 @@ package com.Zyuchen.gmsservice.controller;
 
 
 import com.Zyuchen.common.utils.R;
-import com.Zyuchen.gmsservice.entity.Coach;
 import com.Zyuchen.gmsservice.entity.Course;
-import com.Zyuchen.gmsservice.entity.vo.CoachQuery;
 import com.Zyuchen.gmsservice.entity.vo.CourseQuery;
 import com.Zyuchen.gmsservice.service.CourseService;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -30,7 +27,7 @@ import java.util.List;
  * @since 2021-03-08
  */
 
-@Api(value="课程管理", tags={"课程管理接口"})
+@Api(value="科目管理", tags={"科目管理接口"})
 @RestController
 @RequestMapping("/gmsservice/course")
 @CrossOrigin
