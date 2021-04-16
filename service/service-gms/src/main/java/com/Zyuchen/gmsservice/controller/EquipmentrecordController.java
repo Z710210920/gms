@@ -6,7 +6,6 @@ import com.Zyuchen.gmsservice.entity.Coach;
 import com.Zyuchen.gmsservice.entity.Equipment;
 import com.Zyuchen.gmsservice.entity.Equipmentrecord;
 import com.Zyuchen.gmsservice.entity.User;
-import com.Zyuchen.gmsservice.entity.vo.EquipmentQuery;
 import com.Zyuchen.gmsservice.entity.vo.EquipmentrecordQuery;
 import com.Zyuchen.gmsservice.entity.vo.EquipmentrecordVO;
 import com.Zyuchen.gmsservice.service.CoachService;
@@ -21,10 +20,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

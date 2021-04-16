@@ -1,18 +1,18 @@
-package com.Zyuchen.oss;
+package com.Zyuchen.vod;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
-//oss类不需要启动数据库，在此处禁止数据库配置启动
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan(basePackages = "com.Zyuchen")
 @EnableDiscoveryClient
-public class OSSapplication {
-    public static void main(String[] args){
-        SpringApplication.run(OSSapplication.class,args);
+public class VodApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(VodApplication.class, args);
     }
 }
-

@@ -1,6 +1,7 @@
 package com.Zyuchen.gmsservice.mapper;
 
 import com.Zyuchen.gmsservice.entity.ClassInfo;
+import com.Zyuchen.gmsservice.entity.vo.ClassPublishVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Zyuchen
  * @since 2021-03-22
  */
-public interface ClassMapper extends BaseMapper<ClassInfo> {
-
+public interface ClassInfoMapper extends BaseMapper<ClassInfo> {
+    ClassPublishVo selectClassPublishVoById(String id);
 }

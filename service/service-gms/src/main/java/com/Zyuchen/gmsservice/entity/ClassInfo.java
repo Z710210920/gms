@@ -58,9 +58,6 @@ public class ClassInfo implements Serializable {
     @TableField("classTimes")
     private Integer classTimes;
 
-    @TableField("classCoachId")
-    private String classCoachId;
-
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
     private Date createtime;

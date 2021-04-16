@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Zyuchen.gmsservice.mapper.ClassInfoMapper">
+
+    <select id="selectClassPublishVoById" resultType="com.Zyuchen.gmsservice.entity.vo.ClassPublishVo">
+    SELECT
+        c.title,
+        c.cover,
+        c.classTimes,
+        CONVERT(c.classPrice, DECIMAL(8,2)) price,
+        s1.name AS courseName,
+        t.coachName
+    FROM
+        class_info c
+        LEFT JOIN coach t ON c.coachId = t.coachId
+        LEFT JOIN course s1 ON c.courseId = s1.courseid
+    WHERE
+        c.classId = #{id}
+</select>
+</mapper>

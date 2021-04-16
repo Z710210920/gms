@@ -11,6 +11,7 @@
         <module>service-gms</module>
         <module>service-oss</module>
         <module>service-msm</module>
+        <module>service-vod</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,25 +19,25 @@
     <packaging>pom</packaging>
 
     <dependencies>
-       <!-- <dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
         </dependency>
-        &lt;!&ndash;hystrix依赖，主要是用  @HystrixCommand &ndash;&gt;
+        <!--hystrix依赖，主要是用  @HystrixCommand -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
-        &lt;!&ndash;服务注册&ndash;&gt;
+        <!--服务注册-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-        &lt;!&ndash;服务调用&ndash;&gt;
+        <!--服务调用-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>com.Zyuchen</groupId>
@@ -120,6 +121,10 @@
             <groupId>com.Zyuchen</groupId>
             <artifactId>service-base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
         </dependency>
     </dependencies>
 

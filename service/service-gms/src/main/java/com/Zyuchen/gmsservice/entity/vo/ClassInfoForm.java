@@ -32,8 +32,6 @@ public class ClassInfoForm implements Serializable {
 
     private Integer classTimes;
 
-    private String classCoachId;
-
     private String cover;
 
     private String status;

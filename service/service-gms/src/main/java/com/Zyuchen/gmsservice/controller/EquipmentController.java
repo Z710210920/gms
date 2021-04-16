@@ -2,16 +2,10 @@ package com.Zyuchen.gmsservice.controller;
 
 
 import com.Zyuchen.common.utils.R;
-import com.Zyuchen.gmsservice.entity.Coach;
 import com.Zyuchen.gmsservice.entity.Equipment;
-import com.Zyuchen.gmsservice.entity.Equipmentrecord;
-import com.Zyuchen.gmsservice.entity.User;
 import com.Zyuchen.gmsservice.entity.vo.EquipmentQuery;
-import com.Zyuchen.gmsservice.entity.vo.EquipmentrecordVO;
-import com.Zyuchen.gmsservice.service.CoachService;
 import com.Zyuchen.gmsservice.service.EquipmentService;
 import com.Zyuchen.gmsservice.service.EquipmentrecordService;
-import com.Zyuchen.gmsservice.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
