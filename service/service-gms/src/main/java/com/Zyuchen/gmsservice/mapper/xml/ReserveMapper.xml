@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Zyuchen.gmsservice.mapper.ReserveMapper">
+
+    <select id="selectReserveVo" resultType="com.Zyuchen.gmsservice.entity.vo.ReserveVO">
+    SELECT reserveId, coachName, coach.coachId coachId, user.userId userId, userName, reserveTime, reserveState,note,duration
+    FROM reserve left join `user` on reserve.userId = user.userId
+	    left join coach on reserve.coachId = coach.coachId
+        <where>
+            ${ew.sqlSegment}
+        </where>
+</select>
+</mapper>

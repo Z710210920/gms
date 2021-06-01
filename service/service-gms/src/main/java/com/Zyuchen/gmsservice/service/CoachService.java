@@ -1,6 +1,7 @@
 package com.Zyuchen.gmsservice.service;
 
 import com.Zyuchen.gmsservice.entity.Coach;
+import com.Zyuchen.gmsservice.entity.vo.LoginForm;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CoachService extends IService<Coach> {
 
+    String login(LoginForm loginForm);
 }

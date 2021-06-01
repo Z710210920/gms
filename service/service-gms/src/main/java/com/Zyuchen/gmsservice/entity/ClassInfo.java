@@ -39,6 +39,9 @@ public class ClassInfo implements Serializable {
     @TableField("coachId")
     private String coachId;
 
+    @TableField("currentTimes")
+    private Integer currentTimes;
+
     @TableField("title")
     private String title;
 

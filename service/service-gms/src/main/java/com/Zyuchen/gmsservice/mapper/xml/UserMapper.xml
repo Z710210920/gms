@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.Zyuchen.gmsservice.mapper.UserMapper">
+    <select id="selectBalanceMessage" resultType="com.Zyuchen.gmsservice.entity.vo.UserBalanceMessage">
+            select userName as username,
+            userId,
+            userPhoneNumber,
+            balance,
+            deadline
+                FROM
+                    `user` u
+                    LEFT JOIN `membershipcard` m on m.ownerId = u.userId
+                WHERE
+					u.userPhoneNumber like CONCAT('%',#{userPhoneNumber},'%')
+
+    </select>
+    <select id="pageListUserCondition" resultType="com.Zyuchen.gmsservice.entity.vo.UserVO">
+        SELECT user.*, balance, deadline
+        FROM `user` left join membershipcard on `user`.userId = membershipcard.ownerId
+        <where>
+            ${ew.sqlSegment}
+        </where>
+
+    </select>
 
 </mapper>

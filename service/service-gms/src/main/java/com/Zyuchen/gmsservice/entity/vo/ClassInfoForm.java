@@ -28,6 +28,8 @@ public class ClassInfoForm implements Serializable {
 
     private String classRoomId;
 
+    private Integer currentTimes;
+
     private String equipmentRecordId;
 
     private Integer classTimes;

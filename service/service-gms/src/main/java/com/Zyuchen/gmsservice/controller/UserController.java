@@ -2,10 +2,15 @@ package com.Zyuchen.gmsservice.controller;
 
 
 import com.Zyuchen.common.utils.R;
+import com.Zyuchen.gmsservice.entity.Membershipcard;
 import com.Zyuchen.gmsservice.entity.User;
+import com.Zyuchen.gmsservice.entity.vo.UserBalanceMessage;
 import com.Zyuchen.gmsservice.entity.vo.UserQuery;
+import com.Zyuchen.gmsservice.entity.vo.UserVO;
+import com.Zyuchen.gmsservice.service.MembershipcardService;
 import com.Zyuchen.gmsservice.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +37,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MembershipcardService membershipcardService;
+
     @ApiOperation(value="获取所有用户")
     @GetMapping("/findAll")
     public R findAllUser(){
@@ -53,7 +61,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("pageUser/{current}/{limit}")
+    /*@GetMapping("pageUser/{current}/{limit}")
     @ApiOperation("分页查询")
     public R pageListUser(@PathVariable @ApiParam("当前页") long current,
                            @PathVariable @ApiParam("每页记录数") long limit){
@@ -65,13 +73,8 @@ public class UserController {
         long total =  pageUser.getTotal();
         List<User> records = pageUser.getRecords();
 
-        /*Map map = new HashMap();
-        map.put("total", total);
-        map.put("rows", records);
-        return R.ok().data(map);*/
-
         return R.ok().data("total", total).data("item", records);
-    }
+    }*/
 
     @PostMapping("pageUserCondition/{current}/{limit}")
     @ApiOperation("分页条件查询")
@@ -81,8 +84,8 @@ public class UserController {
                                     @RequestBody(required = false)
                                             UserQuery userQuery){
         //创建page对象
-        Page<User> pageUser = new Page<>(current,limit);
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        Page<UserVO> pageUser = new Page<>(current,limit);
+        QueryWrapper<UserVO> wrapper = new QueryWrapper<>();
         String userName = userQuery.getUserName();
         String userIdentityNumber = userQuery.getUserIdentityNumber();
         String userPhoneNumber = userQuery.getUserPhoneNumber();
@@ -105,11 +108,11 @@ public class UserController {
             wrapper.eq("userIdentityNumber", userIdentityNumber);
         }
         //分页数据储存在pageTeacher对象里面
-        userService.page(pageUser, wrapper);
+        IPage<UserVO> mapIPage = userService.pageListUserCondition(pageUser, wrapper);
 
 
         long total =  pageUser.getTotal();
-        List<User> records = pageUser.getRecords();
+        List<UserVO> records = pageUser.getRecords();
 
 
         return R.ok().data("total", total).data("item", records);
@@ -121,7 +124,11 @@ public class UserController {
             @ApiParam(name = "user", value = "用户对象", required = true)
             @RequestBody User user){
         userService.save(user);
+        Membershipcard membershipcard = new Membershipcard();
+        membershipcard.setOwnerId(user.getUserId());
+        membershipcardService.save(membershipcard);
         return R.ok();
+
     }
 
     @ApiOperation(value = "根据ID查询用户")
@@ -133,6 +140,15 @@ public class UserController {
         return R.ok().data("item", user);
     }
 
+    @ApiOperation(value = "根据电话号码查询用户")
+    @GetMapping("getByPhoneNumber/{PhoneNumber}")
+    public R getByPhoneNumber(
+            @ApiParam(name = "PhoneNumber", value = "用户手机号码", required = true)
+            @PathVariable String PhoneNumber){
+        UserBalanceMessage userBalanceMessage = userService.selectByUserPhoneNumber(PhoneNumber);
+        return R.ok().data("item", userBalanceMessage);
+    }
+
     @ApiOperation(value="根据ID修改用户")
     @PutMapping("update/{id}")
     public R updateById(
@@ -141,7 +157,6 @@ public class UserController {
             @ApiParam(name = "user", value = "用户对象", required = true)
             @RequestBody User user){
         user.setUserId(id);
-        System.out.println(user.toString());
         userService.updateById(user);
         return R.ok();
     }

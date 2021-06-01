@@ -48,6 +48,6 @@ public class Equipment implements Serializable {
 
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
-    private Integer isdeleted;
+    private Boolean isdeleted;
 
 }

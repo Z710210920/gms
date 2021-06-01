@@ -14,11 +14,14 @@ public class JwtUtils {
     public static final String APP_SECRET = "ukc8BDbRigUDaY6pZFfWus2jZWLPHO";
     public static String getJwtToken(String id, String nickname){
         String JwtToken = Jwts.builder()
+                //头
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-                .setSubject("guli-user")
+                .setSubject("user")
+                //过期时间
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE))
+                //token中存入内容
                 .claim("id", id)
                 .claim("nickname", nickname)
                 .signWith(SignatureAlgorithm.HS256, APP_SECRET)

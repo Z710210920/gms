@@ -8,9 +8,12 @@ import java.io.Serializable;
 @Data
 @ApiModel(value="登录信息封装对象", description="登录")
 public class LoginForm implements Serializable {
-    String username;
 
-    String password;
+    private String username;
 
-    String valite;
+    private String password;
+
+    private String uuid;
+
+    private String code;
 }

@@ -1,6 +1,13 @@
 package com.Zyuchen.gmsservice.service;
 
 import com.Zyuchen.gmsservice.entity.User;
+import com.Zyuchen.gmsservice.entity.vo.LoginForm;
+import com.Zyuchen.gmsservice.entity.vo.Register;
+import com.Zyuchen.gmsservice.entity.vo.UserBalanceMessage;
+import com.Zyuchen.gmsservice.entity.vo.UserVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +20,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    String login(LoginForm loginForm);
+
+    User getLoginInfo(String userId);
+
+    void register(Register register);
+
+    UserBalanceMessage selectByUserPhoneNumber(String phoneNumber);
+
+    IPage<UserVO> pageListUserCondition(Page<UserVO> pageUser, QueryWrapper<UserVO> wrapper);
 }

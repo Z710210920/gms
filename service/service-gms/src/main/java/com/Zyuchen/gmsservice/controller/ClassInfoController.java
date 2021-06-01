@@ -1,12 +1,15 @@
 package com.Zyuchen.gmsservice.controller;
 
 
+import com.Zyuchen.common.Exception.DefinedException;
 import com.Zyuchen.common.utils.R;
 import com.Zyuchen.gmsservice.entity.ClassInfo;
+import com.Zyuchen.gmsservice.entity.User;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoForm;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoQuery;
 import com.Zyuchen.gmsservice.entity.vo.ClassPublishVo;
 import com.Zyuchen.gmsservice.service.ClassInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -125,6 +129,22 @@ public class ClassInfoController {
         }else{
             return R.error().message("删除失败");
         }
+    }
+
+    @ApiOperation(value = "根据ID删除课程")
+    @PostMapping("nextPeriod/{classInfoid}")
+    public R nextPeriod(
+            @ApiParam(name = "classInfoid", value = "课程ID", required = true)
+            @PathVariable String classInfoid){
+
+        ClassInfo classInfo = classInfoService.getById(classInfoid);
+        if(classInfo.getCurrentTimes()+1 > classInfo.getClassTimes()){
+            throw new DefinedException(20001,"课程已完结");
+        }
+        classInfo.setCurrentTimes(classInfo.getCurrentTimes()+1);
+        classInfoService.updateById(classInfo);
+
+        return R.ok();
     }
 }
 

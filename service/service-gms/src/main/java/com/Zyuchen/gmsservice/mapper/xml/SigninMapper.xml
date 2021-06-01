@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Zyuchen.gmsservice.mapper.SigninMapper">
+    <select id="selectSignInSituationByClassInfoId" resultType="com.Zyuchen.gmsservice.entity.vo.SigninTable">
+                select t.id as classselectionId,
+            userName as username,
+            avatar,
+            userPhoneNumber,
+            count(s.id) as signIntimes,
+            balance,
+            deadline
+                FROM
+                    classselection t
+                    LEFT JOIN `user` u ON t.user = u.userId
+                    LEFT JOIN `membershipcard` m on m.ownerId = u.userId
+                    LEFT JOIN signin s ON t.id = s.classselection
+                WHERE
+                    t.classId = #{id}
+				group by userId
+</select>
+</mapper>

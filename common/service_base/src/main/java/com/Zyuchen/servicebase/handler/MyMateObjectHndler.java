@@ -13,6 +13,7 @@ public class MyMateObjectHndler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("createtime", new Date(), metaObject);
         this.setFieldValByName("modifiedtime", new Date(), metaObject);
+        this.setFieldValByName("deadline", new Date(), metaObject);
     }
 
     @Override

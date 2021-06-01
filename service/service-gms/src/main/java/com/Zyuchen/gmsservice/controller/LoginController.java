@@ -1,17 +1,22 @@
 package com.Zyuchen.gmsservice.controller;
 
+
+import com.Zyuchen.common.Exception.DefinedException;
+import com.Zyuchen.common.utils.JwtUtils;
 import com.Zyuchen.common.utils.R;
 import com.Zyuchen.gmsservice.entity.User;
 import com.Zyuchen.gmsservice.entity.vo.LoginForm;
+import com.Zyuchen.gmsservice.entity.vo.Register;
+import com.Zyuchen.gmsservice.service.CoachService;
 import com.Zyuchen.gmsservice.service.UserService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/gmsservice/user")
@@ -21,28 +26,44 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private CoachService coachService;
+
     @ApiOperation("用户登录")
     @PostMapping("login")
     public R gin(@RequestBody @ApiParam("用户") LoginForm loginForm){
-        Page<User> pageUser = new Page<>(1,1);
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        String loginName = loginForm.getUsername();
-        String password = loginForm.getPassword();
-        if(!StringUtils.isEmpty(loginName)){
-            wrapper.like("userPhoneNumber",loginName);
-        }
-        if(!StringUtils.isEmpty(password)){
-            wrapper.eq("userPassword",password);
-        }
-        userService.page(pageUser, wrapper);
+        String token = userService.login(loginForm);
+        return R.ok().data("token", token);
+    }
 
-
-        long total =  pageUser.getTotal();
-        if(total == 1){
-            return R.ok().data("token", "admin");
-        }else{
-            return R.error();
+    @ApiOperation(value = "根据token获取登录信息")
+    @GetMapping("getLoginInfo")
+    public R getLoginInfo(HttpServletRequest request){
+        try {
+            String userId = JwtUtils.getMemberIdByJwtToken(request);
+            User user = userService.getLoginInfo(userId);
+            return R.ok().data("item", user);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new DefinedException(20001,"error");
         }
+    }
+
+    @ApiOperation("管理员教练登录")
+    @PostMapping("admin/login")
+    public R admingin(@RequestBody @ApiParam("用户") LoginForm loginForm){
+        System.out.println(loginForm.getCode());
+        String token = coachService.login(loginForm);
+        return R.ok().data("token", token);
+    }
+
+    @ApiOperation("注册")
+    @PostMapping("register")
+    public R register(@RequestBody @ApiParam("用户") Register register){
+        userService.register(register);
+        return R.ok();
     }
 
     @ApiOperation("用户信息获取")
