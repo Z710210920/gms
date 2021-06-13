@@ -12,7 +12,7 @@ public class JwtUtils {
 
     public static final long EXPIRE = 1000 * 60 * 60 * 24;
     public static final String APP_SECRET = "ukc8BDbRigUDaY6pZFfWus2jZWLPHO";
-    public static String getJwtToken(String id, String nickname){
+    public static String getJwtToken(String id, String nickname, String roles){
         String JwtToken = Jwts.builder()
                 //头
                 .setHeaderParam("typ", "JWT")
@@ -24,6 +24,7 @@ public class JwtUtils {
                 //token中存入内容
                 .claim("id", id)
                 .claim("nickname", nickname)
+                .claim("roles", roles)
                 .signWith(SignatureAlgorithm.HS256, APP_SECRET)
                 .compact();
         return JwtToken;
@@ -65,11 +66,19 @@ public class JwtUtils {
          * @param request
          * @return
          */
-    public static String getMemberIdByJwtToken(HttpServletRequest request) {
-        String jwtToken = request.getHeader("token");
-        if(StringUtils.isEmpty(jwtToken)) return "";
-        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
+    public static String getMemberIdByJwtToken(String token) {
+        /*String jwtToken = request.getHeader("token");*/
+        if(StringUtils.isEmpty(token)) return "";
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token);
         Claims claims = claimsJws.getBody();
         return (String)claims.get("id");
+    }
+
+    public static String getMemberRolesByJwtToken(String token) {
+        /*String jwtToken = request.getHeader("token");*/
+        if(StringUtils.isEmpty(token)) return "";
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token);
+        Claims claims = claimsJws.getBody();
+        return (String)claims.get("roles");
     }
 }

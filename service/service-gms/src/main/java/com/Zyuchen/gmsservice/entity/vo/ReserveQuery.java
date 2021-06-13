@@ -22,6 +22,12 @@ public class ReserveQuery implements Serializable {
     @TableField("userId")
     private String userPhoneNumber;
 
+    @TableField("coachId")
+    private String coachId;
+
+    @TableField("userId")
+    private String userId;
+
     @ApiModelProperty(value = "-1.拒绝预约 0.预约但未确认 1.确认但未执行 2.执行中 3.执行完成 4.已评价")
     @TableField("reserveState")
     private Integer reserveState;

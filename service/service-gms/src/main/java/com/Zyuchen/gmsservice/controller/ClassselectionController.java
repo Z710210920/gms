@@ -5,11 +5,10 @@ import com.Zyuchen.common.Exception.DefinedException;
 import com.Zyuchen.common.utils.R;
 import com.Zyuchen.gmsservice.entity.ClassInfo;
 import com.Zyuchen.gmsservice.entity.Classselection;
+import com.Zyuchen.gmsservice.entity.Membershipcard;
 import com.Zyuchen.gmsservice.entity.User;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoQuery;
-import com.Zyuchen.gmsservice.service.ClassInfoService;
-import com.Zyuchen.gmsservice.service.ClassselectionService;
-import com.Zyuchen.gmsservice.service.UserService;
+import com.Zyuchen.gmsservice.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -39,6 +39,15 @@ public class ClassselectionController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccountBookService accountBookService;
+
+    @Autowired
+    private ClassInfoService classInfoService;
+
+    @Autowired
+    private MembershipcardService membershipcardService;
 
     @ApiOperation(value="获取指定用户所有选课")
     @PostMapping("/findAllClassByUser/{page}/{limit}")
@@ -95,13 +104,28 @@ public class ClassselectionController {
     public R SelectClass(
             @ApiParam(name = "classselection", value = "选课对象", required = true)
                     @RequestBody Classselection classselection){
-        QueryWrapper<Classselection> wrapperClassInfo = new QueryWrapper<>();
-        wrapperClassInfo.eq("classId", classselection.getClassId());
-        wrapperClassInfo.eq("user", classselection.getUser());
-        if(classselectionService.getOne(wrapperClassInfo) != null){
-            throw new DefinedException(20001, "该用户已选课");
-        }
-        classselectionService.save(classselection);
+    QueryWrapper<Classselection> wrapperClassInfo = new QueryWrapper<>();
+    wrapperClassInfo.eq("classId", classselection.getClassId());
+    wrapperClassInfo.eq("user", classselection.getUser());
+    if(classselectionService.getOne(wrapperClassInfo) != null){
+        throw new DefinedException(20001, "该用户已选课");
+    }
+    String classId = classselection.getClassId();
+    ClassInfo classInfo = classInfoService.getById(classId);
+    Membershipcard mc = membershipcardService.getOne(new QueryWrapper<Membershipcard>().eq("ownerId", classselection.getUser()));
+    BigDecimal count = BigDecimal.valueOf(classInfo.getClassPrice());
+    //会员不能免费上课
+    /*if(mc.getDeadline().after(new Date())){
+        count = BigDecimal.ZERO;
+    }else{
+        count = BigDecimal.valueOf(classInfo.getClassPrice());
+    }*/
+    ClassInfo ci = new ClassInfo();
+    ci.setClassId(classId);
+    ci.setBuyCount(classInfo.getBuyCount()+1);
+    classInfoService.updateById(ci);
+    accountBookService.deductions(classselection.getUser(), count, 1);
+    classselectionService.save(classselection);
 
         return R.ok();
     }

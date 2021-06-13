@@ -7,6 +7,7 @@ import com.Zyuchen.gmsservice.entity.*;
 import com.Zyuchen.gmsservice.entity.vo.SigninTable;
 import com.Zyuchen.gmsservice.service.SigninService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

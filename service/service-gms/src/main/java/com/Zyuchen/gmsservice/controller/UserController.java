@@ -1,6 +1,7 @@
 package com.Zyuchen.gmsservice.controller;
 
 
+import com.Zyuchen.common.Exception.DefinedException;
 import com.Zyuchen.common.utils.R;
 import com.Zyuchen.gmsservice.entity.Membershipcard;
 import com.Zyuchen.gmsservice.entity.User;
@@ -76,47 +77,47 @@ public class UserController {
         return R.ok().data("total", total).data("item", records);
     }*/
 
-    @PostMapping("pageUserCondition/{current}/{limit}")
-    @ApiOperation("分页条件查询")
-    public R pageListUserCondition(@PathVariable @ApiParam("当前页") long current,
-                                    @PathVariable @ApiParam("每页记录数") long limit,
-                                    @ApiParam("查询条件")
-                                    @RequestBody(required = false)
-                                            UserQuery userQuery){
-        //创建page对象
-        Page<UserVO> pageUser = new Page<>(current,limit);
-        QueryWrapper<UserVO> wrapper = new QueryWrapper<>();
-        String userName = userQuery.getUserName();
-        String userIdentityNumber = userQuery.getUserIdentityNumber();
-        String userPhoneNumber = userQuery.getUserPhoneNumber();
-        String userRealName = userQuery.getUserRealName();
-        Integer level = userQuery.getLevel();
-        if(!StringUtils.isEmpty(level)){
-            wrapper.eq("level",level);
-        }
-        if(!StringUtils.isEmpty(userName)){
-            wrapper.like("userName",userName);
-        }
+@PostMapping("pageUserCondition/{current}/{limit}")
+@ApiOperation("分页条件查询")
+public R pageListUserCondition(@PathVariable @ApiParam("当前页") long current,
+                                @PathVariable @ApiParam("每页记录数") long limit,
+                                @ApiParam("查询条件")
+                                @RequestBody(required = false)
+                                        UserQuery userQuery){
+//创建page对象
+Page<UserVO> pageUser = new Page<>(current,limit);
+QueryWrapper<UserVO> wrapper = new QueryWrapper<>();
+String userName = userQuery.getUserName();
+String userIdentityNumber = userQuery.getUserIdentityNumber();
+String userPhoneNumber = userQuery.getUserPhoneNumber();
+String userRealName = userQuery.getUserRealName();
+Integer level = userQuery.getLevel();
+if(!StringUtils.isEmpty(level)){
+    wrapper.eq("level",level);
+}
+if(!StringUtils.isEmpty(userName)){
+    wrapper.like("userName",userName);
+}
 
-        if(!StringUtils.isEmpty(userRealName)){
-            wrapper.like("userRealName",userRealName);
-        }
-        if(!StringUtils.isEmpty(userPhoneNumber)){
-            wrapper.eq("userPhoneNumber", userPhoneNumber);
-        }
-        if(!StringUtils.isEmpty(userIdentityNumber)){
-            wrapper.eq("userIdentityNumber", userIdentityNumber);
-        }
-        //分页数据储存在pageTeacher对象里面
-        IPage<UserVO> mapIPage = userService.pageListUserCondition(pageUser, wrapper);
-
-
-        long total =  pageUser.getTotal();
-        List<UserVO> records = pageUser.getRecords();
+if(!StringUtils.isEmpty(userRealName)){
+    wrapper.like("userRealName",userRealName);
+}
+if(!StringUtils.isEmpty(userPhoneNumber)){
+    wrapper.eq("userPhoneNumber", userPhoneNumber);
+}
+if(!StringUtils.isEmpty(userIdentityNumber)){
+    wrapper.eq("userIdentityNumber", userIdentityNumber);
+}
+//分页数据储存在pageTeacher对象里面
+IPage<UserVO> mapIPage = userService.pageListUserCondition(pageUser, wrapper);
 
 
-        return R.ok().data("total", total).data("item", records);
-    }
+    long total =  pageUser.getTotal();
+    List<UserVO> records = pageUser.getRecords();
+
+
+    return R.ok().data("total", total).data("item", records);
+}
 
     @ApiOperation(value = "新增用户")
     @PostMapping("save")
@@ -136,7 +137,7 @@ public class UserController {
     public R getById(
             @ApiParam(name = "id", value = "用户ID", required = true)
             @PathVariable String id){
-        User user = userService.getById(id);
+        UserVO user = userService.getUserVOById(id);
         return R.ok().data("item", user);
     }
 
@@ -145,6 +146,9 @@ public class UserController {
     public R getByPhoneNumber(
             @ApiParam(name = "PhoneNumber", value = "用户手机号码", required = true)
             @PathVariable String PhoneNumber){
+    if(PhoneNumber.equals("")){
+        throw new DefinedException(20001, "找不到用户");
+    }
         UserBalanceMessage userBalanceMessage = userService.selectByUserPhoneNumber(PhoneNumber);
         return R.ok().data("item", userBalanceMessage);
     }

@@ -3,7 +3,9 @@ package com.Zyuchen.gmsservice.service;
 import com.Zyuchen.gmsservice.entity.ClassInfo;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoForm;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoQuery;
+import com.Zyuchen.gmsservice.entity.vo.ClassInfoVO;
 import com.Zyuchen.gmsservice.entity.vo.ClassPublishVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,7 +19,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ClassInfoService extends IService<ClassInfo> {
 
-    ClassInfoForm getClassInfoFormById(String id);
+    ClassInfoVO getClassInfoFormById(String id);
 
     String saveClassInfo(ClassInfoForm classInfoForm);
 
@@ -25,7 +27,9 @@ public interface ClassInfoService extends IService<ClassInfo> {
 
     boolean publishClassById(String id);
 
-    void pageQuery(Page<ClassInfo> pageParam, ClassInfoQuery courseQuery);
+    IPage<ClassInfoVO> pageQuery(Page<ClassInfoVO> pageParam, ClassInfoQuery courseQuery);
 
     boolean removeClassInfoById(String id);
+
+    IPage<ClassInfoVO> pageSelectedQuery(Page<ClassInfoVO> pageParam, ClassInfoQuery classInfoQuery);
 }

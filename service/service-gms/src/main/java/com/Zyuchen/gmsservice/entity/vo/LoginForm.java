@@ -16,4 +16,6 @@ public class LoginForm implements Serializable {
     private String uuid;
 
     private String code;
+
+    private Integer roles;
 }

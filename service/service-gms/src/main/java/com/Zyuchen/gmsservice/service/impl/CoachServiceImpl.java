@@ -43,6 +43,7 @@ public class CoachServiceImpl extends ServiceImpl<CoachMapper, Coach> implements
         String token = "";
         String id = "";
         String name = "";
+        String roles = "[coach]";
         String loginName = loginForm.getUsername();
         String password = loginForm.getPassword();
         String code = loginForm.getCode().toLowerCase();
@@ -54,6 +55,7 @@ public class CoachServiceImpl extends ServiceImpl<CoachMapper, Coach> implements
                 if(password.equals(ADMIN)){
                     id = ADMIN;
                     name = NAME;
+                    roles = "[admin]";
                 }else{
                     throw new DefinedException(20001, USERNAMEORPASSWORD_ERROR);
                 }
@@ -73,13 +75,13 @@ public class CoachServiceImpl extends ServiceImpl<CoachMapper, Coach> implements
             }
 
             if(trueCode.equals(code)){
-                token = JwtUtils.getJwtToken(id, name);
+                token = JwtUtils.getJwtToken(id, name, roles);
                 return token;
             }else{
-                throw new DefinedException(20001, VARITYCODE_TIMEOUT);
+                throw new DefinedException(20001, VARITYCODE_ERROR);
             }
         }catch (NullPointerException e){
-            throw new DefinedException(20001, VARITYCODE_ERROR);
+            throw new DefinedException(20001, VARITYCODE_TIMEOUT);
         }
     }
 }

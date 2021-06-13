@@ -11,6 +11,9 @@ import java.io.Serializable;
 public class ClassInfoQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final String COURSE_DRAFT = "Draft";
+    public static final String COURSE_NORMAL = "Normal";
+
     @ApiModelProperty(value = "课程名称")
     private String title;
 
@@ -19,4 +22,8 @@ public class ClassInfoQuery implements Serializable {
 
     @ApiModelProperty(value = "一级类别id")
     private String courseId;
+
+    private String userId;
+
+    private String status;
 }

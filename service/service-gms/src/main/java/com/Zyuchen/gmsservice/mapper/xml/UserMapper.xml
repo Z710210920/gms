@@ -22,5 +22,10 @@
         </where>
 
     </select>
+    <select id="getUserVOById" resultType="com.Zyuchen.gmsservice.entity.vo.UserVO">
+        SELECT user.*, balance, deadline
+        FROM `user` left join membershipcard on `user`.userId = membershipcard.ownerId
+        WHERE user.userId = #{id}
+    </select>
 
 </mapper>

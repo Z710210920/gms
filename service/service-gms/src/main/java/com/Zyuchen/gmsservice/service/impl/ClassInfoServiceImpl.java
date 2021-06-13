@@ -6,6 +6,7 @@ import com.Zyuchen.gmsservice.entity.ClassInfo;
 import com.Zyuchen.gmsservice.entity.ClassVideo;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoForm;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoQuery;
+import com.Zyuchen.gmsservice.entity.vo.ClassInfoVO;
 import com.Zyuchen.gmsservice.entity.vo.ClassPublishVo;
 import com.Zyuchen.gmsservice.mapper.ClassInfoMapper;
 import com.Zyuchen.gmsservice.service.ClassChapterService;
@@ -13,6 +14,7 @@ import com.Zyuchen.gmsservice.service.ClassDescriptionService;
 import com.Zyuchen.gmsservice.service.ClassInfoService;
 import com.Zyuchen.gmsservice.service.ClassVideoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -41,20 +43,15 @@ public class ClassInfoServiceImpl extends ServiceImpl<ClassInfoMapper, ClassInfo
     private ClassChapterService classChapterService;
 
     @Override
-    public ClassInfoForm getClassInfoFormById(String id) {
-        ClassInfo classInfo = this.getById(id);
-        if(classInfo == null){
+    public ClassInfoVO getClassInfoFormById(String id) {
+        Page<ClassInfoVO> page = new Page<>(1,10);
+        IPage<ClassInfoVO> ipage = baseMapper.selectClassInfoVoPage(page, new QueryWrapper<ClassInfo>().eq("class_info.classId", id));
+        if(ipage == null){
             throw new DefinedException(20001, "数据不存在");
+        }else{
+            ClassInfoVO classInfoVO = ipage.getRecords().get(0);
+            return classInfoVO;
         }
-        ClassInfoForm classInfoForm = new ClassInfoForm();
-        BeanUtils.copyProperties(classInfo, classInfoForm);
-
-        ClassDescription classDescription = classDescriptionService.getById(id);
-        if(classInfo != null){
-            classInfoForm.setDescription(classDescription.getDescription());
-        }
-
-        return classInfoForm;
     }
 
     @Override
@@ -85,43 +82,46 @@ public class ClassInfoServiceImpl extends ServiceImpl<ClassInfoMapper, ClassInfo
         return baseMapper.selectClassPublishVoById(id);
     }
 
-    @Override
-    public boolean publishClassById(String id) {
-        ClassInfo classInfo = new ClassInfo();
-        classInfo.setClassId(id);
-        classInfo.setStatus(classInfo.COURSE_NORMAL);
-        Integer count = baseMapper.updateById(classInfo);
-        return null != count && count > 0;
-    }
+@Override
+public boolean publishClassById(String id) {
+    ClassInfo classInfo = new ClassInfo();
+    classInfo.setClassId(id);
+    classInfo.setStatus(classInfo.COURSE_NORMAL);
+    Integer count = baseMapper.updateById(classInfo);
+    return null != count && count > 0;
+}
 
     @Override
-    public void pageQuery(Page<ClassInfo> pageParam, ClassInfoQuery classInfoQuery) {
+    public IPage<ClassInfoVO> pageQuery(Page<ClassInfoVO> pageParam, ClassInfoQuery classInfoQuery) {
 
         QueryWrapper<ClassInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("createtime");
 
         if (classInfoQuery == null){
-            baseMapper.selectPage(pageParam, queryWrapper);
-            return;
+            queryWrapper.eq("status", ClassInfo.COURSE_NORMAL);
+            return baseMapper.selectClassInfoVoPage(pageParam, queryWrapper);
         }
 
         String title = classInfoQuery.getTitle();
         String coachId = classInfoQuery.getCoachId();
         String courseId = classInfoQuery.getCourseId();
+        String status = classInfoQuery.getStatus();
 
         if (!StringUtils.isEmpty(title)) {
             queryWrapper.like("title", title);
         }
 
         if (!StringUtils.isEmpty(coachId) ) {
-            queryWrapper.eq("coachId", coachId);
+            queryWrapper.eq("coach.coachId", coachId);
         }
 
         if (!StringUtils.isEmpty(courseId)) {
-            queryWrapper.ge("courseId", courseId);
+            queryWrapper.ge("course.courseId", courseId);
+        }
+        if (!StringUtils.isEmpty(status)) {
+            queryWrapper.ge("status", status);
         }
 
-        baseMapper.selectPage(pageParam, queryWrapper);
+        return baseMapper.selectClassInfoVoPage(pageParam, queryWrapper);
     }
 
     @Override
@@ -139,5 +139,37 @@ public class ClassInfoServiceImpl extends ServiceImpl<ClassInfoMapper, ClassInfo
 
         Integer result = baseMapper.deleteById(classId);
         return null != result && result > 0;
+    }
+
+    @Override
+    public IPage<ClassInfoVO> pageSelectedQuery(Page<ClassInfoVO> pageParam, ClassInfoQuery classInfoQuery) {
+        QueryWrapper<ClassInfo> queryWrapper = new QueryWrapper<>();
+
+        if (classInfoQuery == null){
+            return baseMapper.selectedClassInfoVoPage(pageParam, queryWrapper);
+        }
+
+        String title = classInfoQuery.getTitle();
+        String coachId = classInfoQuery.getCoachId();
+        String courseId = classInfoQuery.getCourseId();
+        String userId = classInfoQuery.getUserId();
+
+        if (!StringUtils.isEmpty(title)) {
+            queryWrapper.like("title", title);
+        }
+
+        if (!StringUtils.isEmpty(userId)) {
+            queryWrapper.like("classselection.user", userId);
+        }
+
+        if (!StringUtils.isEmpty(coachId) ) {
+            queryWrapper.eq("coachId", coachId);
+        }
+
+        if (!StringUtils.isEmpty(courseId)) {
+            queryWrapper.ge("courseId", courseId);
+        }
+
+        return baseMapper.selectedClassInfoVoPage(pageParam, queryWrapper);
     }
 }

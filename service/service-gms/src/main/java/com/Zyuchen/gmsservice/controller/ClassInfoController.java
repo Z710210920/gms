@@ -7,9 +7,11 @@ import com.Zyuchen.gmsservice.entity.ClassInfo;
 import com.Zyuchen.gmsservice.entity.User;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoForm;
 import com.Zyuchen.gmsservice.entity.vo.ClassInfoQuery;
+import com.Zyuchen.gmsservice.entity.vo.ClassInfoVO;
 import com.Zyuchen.gmsservice.entity.vo.ClassPublishVo;
 import com.Zyuchen.gmsservice.service.ClassInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +46,7 @@ public class ClassInfoController {
             @ApiParam(name = "ClassInfoForm", value = "课程基本信息", required = true)
             @RequestBody ClassInfoForm classInfoForm){
 
+        classInfoForm.setStatus("Draft");
         String classId = classInfoService.saveClassInfo(classInfoForm);
         if(!StringUtils.isEmpty(classId)){
             return R.ok().data("classId", classId);
@@ -58,7 +61,7 @@ public class ClassInfoController {
             @ApiParam(name = "id", value = "课程ID", required = true)
             @PathVariable String id){
 
-        ClassInfoForm classInfoForm = classInfoService.getClassInfoFormById(id);
+        ClassInfoVO classInfoForm = classInfoService.getClassInfoFormById(id);
         return R.ok().data("item", classInfoForm);
     }
 
@@ -107,12 +110,34 @@ public class ClassInfoController {
             @ApiParam(name = "classInfoQuery", value = "查询对象", required = false)
                     ClassInfoQuery classInfoQuery){
 
-        Page<ClassInfo> pageParam = new Page<>(page, limit);
+        Page<ClassInfoVO> pageParam = new Page<>(page, limit);
 
-        classInfoService.pageQuery(pageParam, classInfoQuery);
-        List<ClassInfo> records = pageParam.getRecords();
+        IPage<ClassInfoVO> newpage = classInfoService.pageQuery(pageParam, classInfoQuery);
+        List<ClassInfoVO> records = newpage.getRecords();
 
-        long total = pageParam.getTotal();
+        long total = newpage.getTotal();
+
+        return  R.ok().data("total", total).data("item", records);
+    }
+
+    @ApiOperation(value = "分页课程列表")
+    @GetMapping("Selected/{page}/{limit}")
+    public R pageSelectedQuery(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit,
+
+            @ApiParam(name = "classInfoQuery", value = "查询对象", required = false)
+                    ClassInfoQuery classInfoQuery){
+
+        Page<ClassInfoVO> pageParam = new Page<>(page, limit);
+
+        IPage<ClassInfoVO> newpage = classInfoService.pageSelectedQuery(pageParam, classInfoQuery);
+        List<ClassInfoVO> records = newpage.getRecords();
+
+        long total = newpage.getTotal();
 
         return  R.ok().data("total", total).data("item", records);
     }

@@ -2,6 +2,7 @@ package com.Zyuchen.gmsservice.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -38,6 +39,9 @@ public class Reserve implements Serializable {
     @TableField("userId")
     private String userId;
 
+    @TableField("accountBookId")
+    private String accountBookId;
+
     @TableField("reserveTime")
     private Date reserveTime;
 
@@ -46,6 +50,9 @@ public class Reserve implements Serializable {
     private Integer reserveState;
 
     private Integer duration;
+
+    @ApiModelProperty(value = "金额")
+    private BigDecimal price;
 
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
@@ -58,6 +65,8 @@ public class Reserve implements Serializable {
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Boolean isdeleted;
+
+    private Integer rate;
 
 
 }

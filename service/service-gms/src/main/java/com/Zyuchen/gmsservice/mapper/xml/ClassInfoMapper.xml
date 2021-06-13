@@ -3,18 +3,41 @@
 <mapper namespace="com.Zyuchen.gmsservice.mapper.ClassInfoMapper">
 
     <select id="selectClassPublishVoById" resultType="com.Zyuchen.gmsservice.entity.vo.ClassPublishVo">
-    SELECT
-        c.title,
-        c.cover,
-        c.classTimes,
-        CONVERT(c.classPrice, DECIMAL(8,2)) price,
-        s1.name AS courseName,
-        t.coachName
-    FROM
-        class_info c
-        LEFT JOIN coach t ON c.coachId = t.coachId
-        LEFT JOIN course s1 ON c.courseId = s1.courseid
-    WHERE
-        c.classId = #{id}
-</select>
+        SELECT
+            c.title,
+            c.cover,
+            c.classTimes,
+            CONVERT(c.classPrice, DECIMAL(8,2)) price,
+            s1.name AS courseName,
+            t.coachName
+        FROM
+            class_info c
+            LEFT JOIN coach t ON c.coachId = t.coachId
+            LEFT JOIN course s1 ON c.courseId = s1.courseid
+        WHERE
+            c.classId = #{id}
+    </select>
+    <select id="selectClassInfoVoPage" resultType="com.Zyuchen.gmsservice.entity.vo.ClassInfoVO">
+        SELECT class_info.*, classroom.classRoomName, course.name courseName, target, part, difficulty, coach.coachName, coach.coachPhoneNumber, class_description.description
+        FROM class_info left join classroom on class_info.classRoomId = classroom.classRoomId
+        left join course on class_info.courseId = course.courseId
+        left join coach on class_info.coachId = coach.coachId
+        left join class_description on class_info.classId = class_description.classId
+        <where>
+            ${ew.sqlSegment}
+        </where>
+        order by createtime desc
+    </select>
+    <select id="selectedClassInfoVoPage" resultType="com.Zyuchen.gmsservice.entity.vo.ClassInfoVO">
+        SELECT class_info.*, classroom.classRoomName, course.name courseName, target, part, classselection.id classselectionId, difficulty, coach.coachName, coach.coachPhoneNumber, class_description.description
+        FROM class_info left join classroom on class_info.classRoomId = classroom.classRoomId
+        left join course on class_info.courseId = course.courseId
+        left join coach on class_info.coachId = coach.coachId
+        left join class_description on class_info.classId = class_description.classId
+        left join classselection on class_info.classId = classselection.classId
+        <where>
+            ${ew.sqlSegment}
+        </where>
+        order by createtime desc
+    </select>
 </mapper>

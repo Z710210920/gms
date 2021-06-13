@@ -36,6 +36,10 @@ public class Classroom implements Serializable {
     @ApiModelProperty(value = "最大人数，默认100人")
     private Integer maximum;
 
+    private Integer current;
+
+    private Boolean inService;
+
     @ApiModelProperty(value = "教室介绍")
     private String intro;
 

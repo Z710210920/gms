@@ -4,6 +4,7 @@ package com.Zyuchen.gmsservice.controller;
 import com.Zyuchen.common.Exception.DefinedException;
 import com.Zyuchen.common.utils.JwtUtils;
 import com.Zyuchen.common.utils.R;
+import com.Zyuchen.gmsservice.entity.Coach;
 import com.Zyuchen.gmsservice.entity.User;
 import com.Zyuchen.gmsservice.entity.vo.LoginForm;
 import com.Zyuchen.gmsservice.entity.vo.Register;
@@ -38,7 +39,7 @@ public class LoginController {
         return R.ok().data("token", token);
     }
 
-    @ApiOperation(value = "根据token获取登录信息")
+/*    @ApiOperation(value = "根据token获取登录信息")
     @GetMapping("getLoginInfo")
     public R getLoginInfo(HttpServletRequest request){
         try {
@@ -49,13 +50,19 @@ public class LoginController {
             e.printStackTrace();
             throw new DefinedException(20001,"error");
         }
-    }
+    }*/
 
-    @ApiOperation("管理员教练登录")
+    @ApiOperation("登录")
     @PostMapping("admin/login")
     public R admingin(@RequestBody @ApiParam("用户") LoginForm loginForm){
         System.out.println(loginForm.getCode());
-        String token = coachService.login(loginForm);
+        String token;
+        if (loginForm.getRoles() == 0){
+            token = coachService.login(loginForm);
+        }else{
+            token = userService.login(loginForm);
+        }
+
         return R.ok().data("token", token);
     }
 
@@ -68,8 +75,32 @@ public class LoginController {
 
     @ApiOperation("用户信息获取")
     @GetMapping("info")
-    public R info(){
-        return R.ok().data("roles", "[admin]").data("name","admin").data("avatar","https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3740520249,3092805081&fm=26&gp=0.jpg");
+    public R info(String token){
+        try {
+            String roles = JwtUtils.getMemberRolesByJwtToken(token);
+            if(roles.equals("[admin]")){
+                return R.ok().data("roles", "[admin]").data("name","管理员").data("avatar","https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3740520249,3092805081&fm=26&gp=0.jpg");
+            }else if(roles.equals("[coach]")){
+                String Id = JwtUtils.getMemberIdByJwtToken(token);
+                Coach coach = coachService.getById(Id);
+                return R.ok()
+                        .data("roles", roles)
+                        .data("Id", coach.getCoachId())
+                        .data("name", coach.getCoachName())
+                        .data("avatar", coach.getAvatar());
+            }else{
+                String Id = JwtUtils.getMemberIdByJwtToken(token);
+                User user = userService.getById(Id);
+                return R.ok()
+                        .data("roles", roles)
+                        .data("Id", user.getUserId())
+                        .data("name", user.getUserName())
+                        .data("avatar", user.getAvatar());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new DefinedException(20001,"error");
+        }
     }
 
     @ApiOperation("退出登录")

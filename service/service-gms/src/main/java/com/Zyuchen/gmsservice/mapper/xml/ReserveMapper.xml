@@ -3,7 +3,7 @@
 <mapper namespace="com.Zyuchen.gmsservice.mapper.ReserveMapper">
 
     <select id="selectReserveVo" resultType="com.Zyuchen.gmsservice.entity.vo.ReserveVO">
-    SELECT reserveId, coachName, coach.coachId coachId, user.userId userId, userName, reserveTime, reserveState,note,duration
+    SELECT reserveId, coachName, price, coach.coachId coachId, user.userId userId, userName, reserveTime, reserveState,note,duration
     FROM reserve left join `user` on reserve.userId = user.userId
 	    left join coach on reserve.coachId = coach.coachId
         <where>

@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.Zyuchen.gmsservice.mapper.AccountBookMapper">
-
+    <select id="VOpageByReserve" resultType="com.Zyuchen.gmsservice.entity.vo.AccountBookVO">
+        SELECT account_book.*, user.userName, coach.coachId, coachName
+        FROM account_book
+            left join user on account_book.userId = user.userId
+            left join reserve on account_book.id = reserve.accountBookId
+            left join coach on reserve.coachId = coach.coachId
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
+    <select id="VOpageByClassSelection" resultType="com.Zyuchen.gmsservice.entity.vo.AccountBookVO">
+        SELECT account_book.*, user.userName, coach.coachId, coachName
+        FROM account_book
+            left join user on account_book.userId = user.userId
+            left join classselection on account_book.id = classselection.accountBookId
+            left join class_info on classselection.classId = class_info.classId
+            left join coach on class_info.coachId = coach.coachId
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 </mapper>

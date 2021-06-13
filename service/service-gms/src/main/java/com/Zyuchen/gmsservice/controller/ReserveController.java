@@ -43,13 +43,13 @@ public class ReserveController {
     @Autowired
     private MembershipcardService membershipcardService;
 
-    @ApiOperation("用户预约")
-    @PostMapping("/add")
-    public R add(@RequestBody @ApiParam("add") Reserve reserve){
-        accountBookService.deductions(reserve.getUserId(), BigDecimal.valueOf(Math.ceil(reserve.getDuration()*1.0/30)*100), 2);
-        reserveService.save(reserve);
-        return R.ok();
-    }
+@ApiOperation("用户预约")
+@PostMapping("/add")
+public R add(@RequestBody @ApiParam("add") Reserve reserve){
+    reserve.setAccountBookId(accountBookService.deductions(reserve.getUserId(), BigDecimal.valueOf(Math.ceil(reserve.getDuration()*1.0/30)*100), 2));
+    reserveService.save(reserve);
+    return R.ok();
+}
 
     @ApiOperation("教练拒绝预约")
     @PutMapping("/refused/{id}")
@@ -96,11 +96,20 @@ public class ReserveController {
         String coachPhoneNumber = reserveQuery.getCoachPhoneNumber();
         String userPhoneNumber = reserveQuery.getUserPhoneNumber();
         Integer reserveState = reserveQuery.getReserveState();
+        String coachId = reserveQuery.getCoachId();
+        String userId = reserveQuery.getUserId();
+        wrapper.eq("reserve.isDeleted", 0);
         if(!StringUtils.isEmpty(coachPhoneNumber)){
             wrapper.eq("coachPhoneNumber",coachPhoneNumber);
         }
+        if(!StringUtils.isEmpty(coachId)){
+            wrapper.eq("coach.coachId",coachId);
+        }
         if(!StringUtils.isEmpty(userPhoneNumber)){
             wrapper.eq("userPhoneNumber",userPhoneNumber);
+        }
+        if(!StringUtils.isEmpty(userId)){
+            wrapper.eq("user.userId",userId);
         }
         if(!StringUtils.isEmpty(reserveState)){
             wrapper.eq("reserveState",reserveState);

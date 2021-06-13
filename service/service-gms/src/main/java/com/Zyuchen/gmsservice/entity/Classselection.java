@@ -34,6 +34,8 @@ public class Classselection implements Serializable {
 
     @TableField("user")
     private String user;
+    @TableField("accountBookId")
+    private String accountBookId;
 
 
 }

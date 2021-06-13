@@ -24,4 +24,6 @@ public interface UserMapper extends BaseMapper<User> {
     List<UserBalanceMessage> selectBalanceMessage(String userPhoneNumber);
 
     IPage<UserVO> pageListUserCondition(Page<UserVO> pageUser, @Param(Constants.WRAPPER) QueryWrapper<UserVO> wrapper);
+
+    UserVO getUserVOById(String id);
 }

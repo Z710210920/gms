@@ -1,6 +1,9 @@
 package com.Zyuchen.gmsservice.service;
 
 import com.Zyuchen.gmsservice.entity.AccountBook;
+import com.Zyuchen.gmsservice.entity.vo.AccountBookVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.math.BigDecimal;
@@ -15,5 +18,9 @@ import java.math.BigDecimal;
  */
 public interface AccountBookService extends IService<AccountBook> {
 
-    void deductions(String userId, BigDecimal cost, int type);
+    String deductions(String userId, BigDecimal cost, int type);
+
+    Page<AccountBookVO> VOpageByReserve(Page<AccountBookVO> page, QueryWrapper<AccountBookVO> wrapper);
+
+    Page<AccountBookVO> VOpageByClassSelection(Page<AccountBookVO> page, QueryWrapper<AccountBookVO> wrapper);
 }

@@ -29,4 +29,6 @@ public interface UserService extends IService<User> {
     UserBalanceMessage selectByUserPhoneNumber(String phoneNumber);
 
     IPage<UserVO> pageListUserCondition(Page<UserVO> pageUser, QueryWrapper<UserVO> wrapper);
+
+    UserVO getUserVOById(String id);
 }

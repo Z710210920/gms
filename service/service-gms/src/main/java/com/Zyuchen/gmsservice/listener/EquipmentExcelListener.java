@@ -27,32 +27,32 @@ public class EquipmentExcelListener extends AnalysisEventListener<EquipmentData>
         this.list = list;
     }
 
-    @Override
-    public void invoke(EquipmentData equipmentData, AnalysisContext analysisContext) {
-        if(equipmentData == null){
-            throw new DefinedException(20001, "文件数据为空");
+@Override
+public void invoke(EquipmentData equipmentData, AnalysisContext analysisContext) {
+    if(equipmentData == null){
+        throw new DefinedException(20001, "文件数据为空");
+    }else{
+        Equipment excistEquipment = this.excistOneEquipment(equipmentService, equipmentData.toEquipment());
+        if(excistEquipment == null){
+            excistEquipment = equipmentData.toEquipment();
+            excistEquipment.setEquipmentLeftNumber(excistEquipment.getEquipmentTotalNumber());
+            equipmentService.save(excistEquipment);
         }else{
-            Equipment excistEquipment = this.excistOneEquipment(equipmentService, equipmentData.toEquipment());
-            if(excistEquipment == null){
-                excistEquipment = equipmentData.toEquipment();
-                excistEquipment.setEquipmentLeftNumber(excistEquipment.getEquipmentTotalNumber());
-                equipmentService.save(excistEquipment);
-            }else{
-                Integer total = equipmentData.toEquipment().getEquipmentTotalNumber();
-                excistEquipment.setEquipmentTotalNumber(excistEquipment.getEquipmentTotalNumber()+total);
-                excistEquipment.setEquipmentLeftNumber(excistEquipment.getEquipmentLeftNumber()+total);
-                equipmentService.updateById(excistEquipment);
-            }
-            Equipmentrecord er = new Equipmentrecord();
-            er.setEquipmentId(excistEquipment.getEquipmentId());
-            er.setOperator("管理员");
-            er.setOperatorType(0);
-            er.setRecordType(1);
-            er.setEquipmentNumber(equipmentData.toEquipment().getEquipmentTotalNumber());
-            equipmentrecordService.save(er);
-            list.add(equipmentData.toEquipment());
+            Integer total = equipmentData.toEquipment().getEquipmentTotalNumber();
+            excistEquipment.setEquipmentTotalNumber(excistEquipment.getEquipmentTotalNumber()+total);
+            excistEquipment.setEquipmentLeftNumber(excistEquipment.getEquipmentLeftNumber()+total);
+            equipmentService.updateById(excistEquipment);
         }
+        Equipmentrecord er = new Equipmentrecord();
+        er.setEquipmentId(excistEquipment.getEquipmentId());
+        er.setOperator("管理员");
+        er.setOperatorType(0);
+        er.setRecordType(1);
+        er.setEquipmentNumber(equipmentData.toEquipment().getEquipmentTotalNumber());
+        equipmentrecordService.save(er);
+        list.add(equipmentData.toEquipment());
     }
+}
 
     public Equipment excistOneEquipment(EquipmentService equipmentService, Equipment equipment){
         QueryWrapper<Equipment> wrapper = new QueryWrapper<>();

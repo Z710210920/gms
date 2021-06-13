@@ -20,6 +20,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * <p>
  * 用户信息表 服务实现类
@@ -31,6 +34,11 @@ import org.springframework.util.StringUtils;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    private static final String USERNAMEORPASSWORD_ERROR = "用户名或密码错误！";
+    private static final String USERNAMEORPASSWORDNOTEMPTY = "用户名或密码为空！";
+    private static final String VARITYCODE_TIMEOUT = "验证码失效，请重新获取";
+    private static final String VARITYCODE_ERROR = "验证码错误！";
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @Override
@@ -38,34 +46,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String token = null;
         String loginName = loginForm.getUsername();
         String password = loginForm.getPassword();
-        if(StringUtils.isEmpty(loginName) || StringUtils.isEmpty(password)){
-            throw new DefinedException(20001, "error");
-        }
-        User user = baseMapper.selectOne(new QueryWrapper<User>().eq("userPhoneNumber", loginName));
-
-        if(user == null){
-            new DefinedException(20001, "用户名或密码错误！");
-        }
-        if(!MD5.encrypt(password).equals(user.getUserPassword())){
-            new DefinedException(20001, "用户名或密码错误！");
-        }
-
-        if(user.getIsDeleted()){
-            new DefinedException(20001, "用户名或密码错误！");
-        }
-
-        String code = loginForm.getCode().toLowerCase();
         String uuid = loginForm.getUuid();
-
-        String trueCode = redisTemplate.opsForValue().get(uuid).toLowerCase();
-        if(trueCode == null){
-            new DefinedException(20001,"验证码失效,请重新获取");
-        }else if(trueCode.equals(code)){
-            token = JwtUtils.getJwtToken(user.getUserId(), user.getUserName());
-        }else{
-            throw new DefinedException(20001,"验证码错误");
+        String code = loginForm.getCode().toLowerCase();
+        try{
+            String trueCode = Objects.requireNonNull(redisTemplate.opsForValue().get(uuid)).toLowerCase();
+            if(StringUtils.isEmpty(loginName) || StringUtils.isEmpty(password)){
+                throw new DefinedException(20001, USERNAMEORPASSWORDNOTEMPTY);
+            }
+            User user = baseMapper.selectOne(new QueryWrapper<User>().eq("userPhoneNumber", loginName));
+            if(user == null || !MD5.encrypt(password).equals(user.getUserPassword()) ||
+                Boolean.TRUE.equals(user.getIsDeleted())){
+                new DefinedException(20001, USERNAMEORPASSWORD_ERROR);
+            }
+            if(trueCode.equals(code)){
+                token = JwtUtils.getJwtToken(user.getUserId(), user.getUserName(), "[user]");
+                return token;
+            }else{
+                throw new DefinedException(20001, VARITYCODE_ERROR);
+            }
+        }catch (NullPointerException e){
+            throw new DefinedException(20001, VARITYCODE_TIMEOUT);
         }
-        return token;
     }
 
     @Override
@@ -100,12 +101,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserBalanceMessage selectByUserPhoneNumber(String phoneNumber) {
+        List<UserBalanceMessage> userlist = baseMapper.selectBalanceMessage(phoneNumber);
+        if(userlist.size() == 0){
+            throw new DefinedException(20001, "找不到用户");
+        }
         return baseMapper.selectBalanceMessage(phoneNumber).get(0);
     }
 
     @Override
     public IPage<UserVO> pageListUserCondition(Page<UserVO> pageUser, QueryWrapper<UserVO> wrapper) {
         return baseMapper.pageListUserCondition(pageUser, wrapper);
+    }
+
+    @Override
+    public UserVO getUserVOById(String id) {
+        return baseMapper.getUserVOById(id);
     }
 
 }

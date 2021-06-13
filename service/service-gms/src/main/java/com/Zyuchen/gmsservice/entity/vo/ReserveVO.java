@@ -1,8 +1,10 @@
 package com.Zyuchen.gmsservice.entity.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -17,9 +19,9 @@ public class ReserveVO{
     private String note;
 
     private String userName;
-
+    private BigDecimal price;
     private String userId;
-
+    private String accountBookId;
     private Date reserveTime;
 
     private Integer reserveState;
